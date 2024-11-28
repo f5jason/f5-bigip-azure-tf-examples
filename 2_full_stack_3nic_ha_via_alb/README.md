@@ -18,7 +18,7 @@ Tasks:
 
 Outputs (example):
    - admin_password = "vNEjo7sU7Z9iBCgy"
-   - demo_vnet = "jchiu0_demo_vnet"
+   - demo_vnet = "my_demo_vnet"
    - jumphost_management_pip = "ssh azureuser@4.204.69.78 pass: vNEjo7sU7Z9iBCgy"
    - remote_client_ip = "100.219.105.84"
-   - resource_group = "jchiu0_rg"
+   - resource_group = "my_rg"
