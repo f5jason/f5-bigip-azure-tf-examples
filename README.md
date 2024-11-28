@@ -13,7 +13,7 @@ This repository contains some Terraform examples to deploy BIG-IP VE instances i
 
 - You can choose between PAYG and BYOL licensing options (some editing required).
 
-- The following extensions are leverage to automate the onboarding and initial application configuration:
+- The following extensions are leveraged to automate the onboarding and initial application configuration:
 
   - BIG-IP Runtime-Init
   - Declarative Onboard (DO)
