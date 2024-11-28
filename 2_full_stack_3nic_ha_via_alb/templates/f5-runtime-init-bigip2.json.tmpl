@@ -1,0 +1,56 @@
+{
+  "controls": {
+    "logLevel": "silly",
+    "extensionInstallDelayInMs": 15000
+  },
+  "pre_onboard_enabled": [
+    {
+      "name": "provision_rest",
+      "type": "inline",
+      "commands": [
+        "/usr/bin/setdb provision.extramb 1000 || true",
+        "/usr/bin/setdb iapplxrpm.timeout 300 || true",
+        "/usr/bin/setdb icrd.timeout 180 || true",
+        "/usr/bin/setdb restjavad.timeout 180 || true",
+        "/usr/bin/setdb restnoded.timeout 180 || true",
+        "/usr/bin/setdb setup.run false || true",
+        "/usr/bin/setdb httpd.matchclient false || true"
+      ]
+    }
+  ],
+  "post_onboard_enabled": [
+    {
+      "name": "switch_active_bigip",
+      "type": "inline",
+      "commands": [
+        "for i in {1..30}; do if [[ $(tmsh show /sys failover | grep -c -i 'failover active') == 1 ]]; then tmsh run /sys failover standby; break; fi; sleep 2; done"
+      ]
+    }
+  ],
+  "runtime_parameters": [],
+  "extension_packages": {
+    "install_operations": [
+      {
+        "extensionType": "do",
+        "extensionVersion": "1.46.0"
+      },
+      {
+        "extensionType": "as3",
+        "extensionVersion": "3.53.0"
+      },
+      {
+        "extensionType": "ts",
+        "extensionVersion": "1.36.0"
+      }
+    ]
+  },
+  "extension_services": {
+    "service_operations": [
+      {
+        "extensionType": "do",
+        "type": "inline",
+        "value": ${f5-do-json}
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+#!/bin/bash -x
+
+mkdir -p  /var/log/cloud /config/cloud /var/config/rest/downloads
+
+# Send output to log file and serial console
+LOG_FILE=/var/log/cloud/startup-script.log
+[[ ! -f $LOG_FILE ]] && touch $LOG_FILE || { echo "Run Only Once. Exiting"; exit; }
+npipe=/tmp/$$.tmp
+trap "rm -f $npipe" EXIT
+mknod $npipe p
+tee <$npipe -a $LOG_FILE /dev/ttyS0 &
+exec 1>&-
+exec 1>$npipe
+exec 2>&1
+
+echo "$(date +"%Y-%m-%dT%H:%M:%S.%3NZ") : Startup Script Start"
+
+# Workaround for iAppsLX auth changes
+tmsh modify sys db httpd.matchclient value false
+bigstart restart httpd restnoded
+sleep 60
+tmsh save sys config
+
+# Create the f5-bigip-runtime-init config file
+CONFIG_FILE=/config/cloud/runtime-init-conf.json
+cat << 'EOF' > $CONFIG_FILE
+${f5-runtime-init}
+EOF
+
+# Download BIG-IP Runtime Init package and install
+PACKAGE_URL=https://cdn.f5.com/product/cloudsolutions/f5-bigip-runtime-init/v2.0.3/dist/f5-bigip-runtime-init-2.0.3-1.gz.run
+
+for i in {1..30}; do
+    curl -fv --retry 1 --connect-timeout 5 -L $PACKAGE_URL -o "/var/config/rest/downloads/f5-bigip-runtime-init.gz.run" && break || sleep 10
+done
+bash /var/config/rest/downloads/f5-bigip-runtime-init.gz.run -- '--cloud azure'
+
+# Run
+f5-bigip-runtime-init --config-file $CONFIG_FILE
+
+echo "$(date +"%Y-%m-%dT%H:%M:%S.%3NZ") : Startup Script Finish"

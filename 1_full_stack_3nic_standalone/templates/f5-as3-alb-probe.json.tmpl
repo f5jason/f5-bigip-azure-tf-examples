@@ -1,0 +1,29 @@
+{
+  "class": "AS3",
+  "action": "deploy",
+  "persist": true,
+  "declaration": {
+    "class": "ADC",
+    "schemaVersion": "3.13.0",
+    "id": "alb-probe",
+    "label": "alb-probe",
+    "remark": "Virtual Server to respond to Azure Load Balancer health probes",
+    "controls": {
+      "trace": true
+    },
+    "azure-probe": {
+      "class": "Tenant",
+      "alb-probe-vs": {
+        "class": "Application",
+        "service": {
+          "class": "Service_TCP",
+          "virtualAddresses": [
+            "0.0.0.0/0"
+          ],
+          "virtualPort": 3456,
+          "snat": "none"
+        }
+      }
+    }
+  }
+}

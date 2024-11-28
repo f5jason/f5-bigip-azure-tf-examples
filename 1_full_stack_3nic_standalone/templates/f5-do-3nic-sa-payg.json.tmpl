@@ -1,0 +1,98 @@
+{
+    "schemaVersion": "1.0.0",
+    "class": "Device",
+    "async": true,
+    "label": "Onboard BIG-IP Standalone - 3 NIC PAYG",
+    "Common": {
+        "class": "Tenant",
+        "mySystem": {
+            "class": "System",
+            "hostname": "${hostname}",
+            "cliInactivityTimeout": 3600,
+            "consoleInactivityTimeout": 3600,
+            "autoPhonehome": false
+        },
+        "dbVars": {
+            "class": "DbVariables",
+            "provision.extramb": 1000,
+            "ui.advisory.enabled": true,
+            "ui.advisory.color": "green",
+            "ui.advisory.text": "${hostname}",
+            "config.allow.rfc3927": "enable"
+        },
+        "azureadmin": {
+            "class": "User",
+            "userType": "regular",
+            "password": "${admin_password}",
+            "shell": "tmsh"
+        },
+        "${admin_username}": {
+            "class": "User",
+            "userType": "regular",
+            "password": "${admin_password}",
+            "shell": "bash"
+        },
+        "myDns": {
+            "class": "DNS",
+            "nameServers": [${dns_servers}],
+            "search": ["f5.com"]
+        },
+        "myNtp": {
+            "class": "NTP",
+            "servers": [${ntp_servers}],
+            "timezone": "${timezone}"
+        },
+        "myProvisioning": {
+            "class": "Provision",
+            "ltm": "nominal"
+        },
+        "external": {
+            "class": "VLAN",
+            "tag": 4094,
+            "mtu": 1500,
+            "interfaces": [
+                {
+                    "name": "1.1",
+                    "tagged": false
+                }
+            ]
+        },
+        "internal": {
+            "class": "VLAN",
+            "tag": 4093,
+            "mtu": 1500,
+            "interfaces": [
+                {
+                    "name": "1.2",
+                    "tagged": false
+                }
+            ]
+        },
+        "external_selfip": {
+            "class": "SelfIp",
+            "address": "${external_selfip}",
+            "vlan": "external",
+            "allowService": "none",
+            "trafficGroup": "traffic-group-local-only"
+        },
+        "internal_selfip": {
+            "class": "SelfIp",
+            "address": "${internal_selfip}",
+            "vlan": "internal",
+            "allowService": "none",
+            "trafficGroup": "traffic-group-local-only"
+        },
+        "default-route": {
+            "class": "Route",
+            "network": "default",
+            "gw": "${default_gw}",
+            "mtu": 1500
+        },
+        "app-route": {
+            "class": "Route",
+            "network": "${app_route_dest}",
+            "gw": "${app_route_gw}",
+            "mtu": 1500
+        }
+    }
+}

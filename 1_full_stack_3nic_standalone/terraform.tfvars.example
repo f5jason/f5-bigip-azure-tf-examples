@@ -1,0 +1,37 @@
+### TFVARS
+
+# Prefix for objects being created
+prefix = "myprefix1"
+
+# Resource Group - will be created based on prefix variable value (+ '_rg')
+
+# Location
+location = "canadacentral"
+
+# Tags
+tags = {
+  "owner" = "user@lab.demo"
+}
+
+
+# Networking
+vnet_name = "demo_vnet"
+vnet_cidrs = {
+  main_vnet = {
+    "vnet"        = "10.1.0.0/16"
+    "management"  = "10.1.1.0/24"
+    "external"    = "10.1.10.0/24"
+    "internal"    = "10.1.20.0/24"
+    "application" = "10.1.30.0/24"
+  }
+}
+
+# VIP route (Azure Route Table)
+vip_udr = {
+  dest    = "10.10.10.0/24"
+  gateway = "10.1.10.5"
+}
+
+# Lab admin user name (for all VMs). 
+# Lab admin password is randomly generated and stored in local.admin_password.
+admin_username = "azureuser"

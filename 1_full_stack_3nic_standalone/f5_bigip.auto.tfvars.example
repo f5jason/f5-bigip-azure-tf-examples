@@ -1,0 +1,72 @@
+# BIG-IP Provisioning
+
+# VM Instance
+# Note: Min. Standard_D8s_v4 needed to access more than 2 NICs
+#
+instance_type = "Standard_D8s_v4"
+
+# BYOL Image
+#   az vm image list --output yaml --publisher f5-networks --all | grep byol:17.1.1
+#   urn: f5-networks:f5-big-ip-byol:f5-big-all-2slot-byol:17.1.104000
+#
+# PAYG Image
+#   az vm image list --output yaml --publisher f5-networks --all | grep hourly:17.1.1
+#   urn: f5-networks:f5-big-ip-good:f5-bigip-virtual-edition-25m-good-hourly:17.1.104000
+#
+product       = "f5-big-ip-good"
+image_name    = "f5-bigip-virtual-edition-25m-good-hourly"
+bigip_version = "17.1.104000"
+
+
+# BIG-IP BYOL Licenses (if applicable)
+#
+byol_licenses = {
+  bigip1 = "device-1-license-key"
+  bigip2 = "device-2-license-key"
+}
+
+
+# BIG-IP Settings (2-node cluster)
+#
+bigip_subnets = ["management", "external", "internal"]
+
+bigip_netcfg = {
+  bigip1 = {
+    az         = "1"
+    hostname   = "bigip1.f5demo.lab"
+    tag        = "bigip1_3nic"
+    management = "10.1.1.10/24"
+    external   = "10.1.10.10/24"
+    internal   = "10.1.20.10/24"
+    default_gw = "10.1.10.1"
+  }
+  bigip2 = {
+    az         = "2"
+    hostname   = "bigip2.f5demo.lab"
+    tag        = "bigip2_3nic"
+    management = "10.1.1.11/24"
+    external   = "10.1.10.11/24"
+    internal   = "10.1.20.11/24"
+    default_gw = "10.1.10.1"
+  }
+}
+
+
+timezone = "US/Eastern"
+
+dns_servers = "\"168.63.129.16\"" # Azure DNS
+
+# Static route to app subnet
+app_route = {
+  dest    = "10.1.30.0/24"
+  gateway = "10.1.20.1"
+}
+
+# Application Virtual Server
+app1_vs = {
+  dest       = "10.10.10.80"
+  port       = "80"
+  pool       = "app1_pool"
+  poolmember = "10.1.30.100"
+  monitor    = "http"
+}
