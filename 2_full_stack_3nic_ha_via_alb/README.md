@@ -1,6 +1,6 @@
-### Base network infrastructure to support a 3-NIC BIG-IP HA via LB deployment
+# Base network infrastructure to support a 3-NIC BIG-IP HA via LB deployment
 
-# Note: Alien subnet (10.10.10.0/24) used for F5 Virtual Servers
+## Note: Alien subnet (10.10.10.0/24) used for F5 Virtual Servers
 
 Tasks:
    - Create Resource Group

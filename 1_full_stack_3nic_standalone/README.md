@@ -1,6 +1,6 @@
-### Deploys base network infrastructure and a single 3-NIC BIG-IP
+# Deploys base network infrastructure and a single 3-NIC BIG-IP
 
-# Note: Alien subnet (10.10.10.0/24) used for F5 Virtual Servers
+## Note: Alien subnet (10.10.10.0/24) used for F5 Virtual Servers
 
 Tasks:
    - Create Resource Group
