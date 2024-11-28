@@ -15,8 +15,6 @@ This repository contains some Terraform examples to deploy BIG-IP VE instances i
 
 - The following extensions are leverage to automate the onboarding and initial application configuration:
 
-  1. BIG-IP Runtime-Init
-  2. Declarative Onboard (DO)
-  3. Application Services 3 (AS3)
-
-
+  - BIG-IP Runtime-Init
+  - Declarative Onboard (DO)
+  - Application Services 3 (AS3)
